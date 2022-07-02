@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    hostname: metabase
+    volumes:
+      - ./metabase-data:/metabase-data
+    ports:
+      - 3000:3000
+    environment:
+      MB_DB_FILE: /metabase-data/metabase.db
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    restart: always
+    volumes:
+      - ./mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "mongo_user"
+      MONGO_INITDB_ROOT_PASSWORD: "mongo_pass"
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: "mongo_user"
+      ME_CONFIG_MONGODB_ADMINPASSWORD: "mongo_pass"
+      ME_CONFIG_MONGODB_URL: mongodb://mongo_user:mongo_pass@mongo:27017/
+    depends_on:
+      - mongo
+
