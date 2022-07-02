@@ -1,16 +1,21 @@
+import os
 import logging
 
+import dotenv
 import pandas as pd
 import pymongo
 
-mongo_host = "localhost"
-mongo_port = "27017"
-mongo_user = "mongo_user"
-mongo_pass = "mongo_pass"
-
+# Data configs
 input_file = "./data/2019-05-28_portuguese_hate_speech_binary_classification.csv"
 output_db = "my_db"
 output_collection = "hate_speech_binary"
+
+# Load mongo configs from .env file
+dotenv.load_dotenv()
+mongo_host = os.getenv("MONGO_HOST", "localhost")
+mongo_port = os.getenv("MONGO_PORT")
+mongo_user = os.getenv("MONGO_USER")
+mongo_pass = os.getenv("MONGO_PASS")
 
 logging.basicConfig(level=logging.DEBUG, format='%(levelname)s : %(name)s : %(asctime)s : %(message)s')
 
